@@ -6,14 +6,14 @@ import config as conf
 from urllib.parse import urlparse
 import re
 
+db = MySQLdb.connect(conf.DATABASE['server'], conf.DATABASE['username'], conf.DATABASE['password'],
+                         conf.DATABASE['database'])
+cursor = db.cursor()
 startingPoints = conf.STARTING_POINTS
 for startingPoint in startingPoints:
     frontier = [startingPoint]
     blacklist = []
     pFrontier = []
-    db = MySQLdb.connect(conf.DATABASE['server'], conf.DATABASE['username'], conf.DATABASE['password'],
-                         conf.DATABASE['database'])
-    cursor = db.cursor()
     while len(frontier) > 0:
         source = frontier.pop(0)
         pFrontier.append(source)
@@ -42,4 +42,4 @@ for startingPoint in startingPoints:
                         db.rollback()
         if len(blacklist) > conf.LIMIT:
             break
-    db.close()
+db.close()
